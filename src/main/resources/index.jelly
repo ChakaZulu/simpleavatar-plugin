@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+  This plugin shows images from another host as Jenkins user images.
+</div>
