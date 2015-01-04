@@ -27,11 +27,11 @@ import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import hudson.model.User;
-import hudson.tasks.Mailer;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.ListIterator;
+import org.jenkinsci.plugins.simpleavatar.PluginTestConfigs;
 import org.jenkinsci.plugins.simpleavatar.SimpleAvatarResolver;
+import static org.jenkinsci.plugins.simpleavatar.TestUtil.AddUser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -42,6 +42,7 @@ import org.junit.Rule;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.xml.sax.SAXException;
 
+
 /**
  *
  * @author Michael Schuele
@@ -51,12 +52,6 @@ public class UserImageUrlTest {
     @Rule
     public final JenkinsRule j = new JenkinsRule();
     private JenkinsRule.WebClient wc;
-            
-    private static final String AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT = "http://intranet.local/<u>/<i>/image_<w>_<h>.png";
-    private static final String AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT_EXPECTED_USER = "http://intranet.local/John Doe/JohnDoe/image_48_48.png";
-    private static final String AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT_EXPECTED_PEOPLE = "http://intranet.local/John Doe/JohnDoe/image_32_32.png";
-    private static final String AVATAR_URL_TEMPLATE_STATIC = "http://intranet.local/image.png";
-    private static final String AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS = "http://intranet.local/image.png?%3Cu%3E=user&%3Ch%3E=16";
     
     public UserImageUrlTest() {
     }
@@ -78,60 +73,99 @@ public class UserImageUrlTest {
     public void tearDown() {
     }
 
+    // people page
+    @Test
+    public void OtherUserImageOnPeoplePageForNullTemplate() throws IOException, SAXException, InterruptedException
+    {
+        final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_NULL);
+        User user = AddUser("John Doe", "JohnDoe");
+        Assert.assertFalse("image url is incorrect", PeopleUserImageUrl(user).startsWith(PluginTestConfigs.AVATAR_URL_TEMPLATE_DOMAIN));
+    }
+
+    @Test
+    public void OtherUserImageOnPeoplePageForEmptyTemplate() throws IOException, SAXException, InterruptedException
+    {
+        final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_EMPTY);
+        User user = AddUser("John Doe", "JohnDoe");
+        Assert.assertFalse("image url is incorrect", PeopleUserImageUrl(user).startsWith(PluginTestConfigs.AVATAR_URL_TEMPLATE_DOMAIN));
+    }
+
     @Test
     public void UserImageOnPeoplePageForStaticTemplate() throws IOException, SAXException, InterruptedException
     {
         final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        descriptor.setAvatarUrlTemplate(AVATAR_URL_TEMPLATE_STATIC);
-        User user = AddUser("JohnDoe", "JohnDoe");
-        Assert.assertEquals("image url is incorrect", AVATAR_URL_TEMPLATE_STATIC, PeopleUserImageUrl(user));
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC);
+        User user = AddUser("John Doe", "JohnDoe");
+        Assert.assertEquals("image url is incorrect", PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC, PeopleUserImageUrl(user));
     }
     
     @Test
     public void UserImageOnPeoplePageForStaticTemplateWithEncodedTemplateKeys() throws IOException, SAXException, InterruptedException
     {
         final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        descriptor.setAvatarUrlTemplate(AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS);
-        User user = AddUser("JohnDoe", "JohnDoe");
-        Assert.assertEquals("image url is incorrect", AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS, PeopleUserImageUrl(user));
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS);
+        User user = AddUser("John Doe", "JohnDoe");
+        Assert.assertEquals("image url is incorrect", PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS, PeopleUserImageUrl(user));
     }
     
     @Test
     public void UserImageOnPeoplePageForDynamicTemplate() throws IOException, SAXException, InterruptedException
     {
         final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        descriptor.setAvatarUrlTemplate(AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT);
         User user = AddUser("John Doe", "JohnDoe");
-        Assert.assertEquals("image url is incorrect", AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT_EXPECTED_PEOPLE, PeopleUserImageUrl(user));
+        Assert.assertEquals("image url is incorrect", PluginTestConfigs.AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT_EXPECTED_PEOPLE, PeopleUserImageUrl(user));
     }
     
+    // user page
+    @Test
+    public void OtherUserImageOnUserPageForNullTemplate() throws IOException, SAXException, InterruptedException
+    {
+        final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_NULL);
+        User user = AddUser("John Doe", "JohnDoe");
+        Assert.assertFalse("image url is incorrect", UserImageUrl(user).startsWith(PluginTestConfigs.AVATAR_URL_TEMPLATE_DOMAIN));
+    }
+
+    @Test
+    public void OtherUserImageOnUserPageForEmptyTemplate() throws IOException, SAXException, InterruptedException
+    {
+        final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_EMPTY);
+        User user = AddUser("John Doe", "JohnDoe");
+        Assert.assertFalse("image url is incorrect", UserImageUrl(user).startsWith(PluginTestConfigs.AVATAR_URL_TEMPLATE_DOMAIN));
+    }
+
     @Test
     public void UserImageOnUserPageForStaticTemplate() throws IOException, SAXException
     {
         final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        descriptor.setAvatarUrlTemplate(AVATAR_URL_TEMPLATE_STATIC);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC);
         User user = AddUser("John Doe", "JohnDoe");
-        Assert.assertEquals("image url is incorrect", AVATAR_URL_TEMPLATE_STATIC, UserImageUrl(user));
+        Assert.assertEquals("image url is incorrect", PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC, UserImageUrl(user));
     }
     
     @Test
     public void UserImageOnUserPageForStaticTemplateWithEncodedTemplateKeys() throws IOException, SAXException
     {
         final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        descriptor.setAvatarUrlTemplate(AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS);
         User user = AddUser("John Doe", "JohnDoe");
-        Assert.assertEquals("image url is incorrect", AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS, UserImageUrl(user));
+        Assert.assertEquals("image url is incorrect", PluginTestConfigs.AVATAR_URL_TEMPLATE_STATIC_WITH_ENCODED_TEMPLATE_KEYS, UserImageUrl(user));
     }
     
     @Test
     public void UserImageOnUserPageForDynamicTemplate() throws IOException, SAXException
     {
         final SimpleAvatarResolver.DescriptorImpl descriptor = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        descriptor.setAvatarUrlTemplate(AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT);
+        descriptor.setAvatarUrlTemplate(PluginTestConfigs.AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT);
         User user = AddUser("John Doe", "JohnDoe");
-        Assert.assertEquals("image url is incorrect", AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT_EXPECTED_USER, UserImageUrl(user));
+        Assert.assertEquals("image url is incorrect", PluginTestConfigs.AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT_EXPECTED_USER, UserImageUrl(user));
     }
     
+    // utils
     private String UserImageUrl(User user) throws IOException, SAXException
     {
         // jenkins 1.509.3
@@ -156,13 +190,6 @@ public class UserImageUrlTest {
         return attr.getValue();
     }
 
-    private User AddUser(String userName, String userId)
-    {
-        final User user = User.get(userId, true, Collections.emptyMap());
-        user.setFullName(userName);
-        return user;
-    }
-    
     // taken from gravatar plugin UserGravatarResolverIntegrationTest.java
     private HtmlPage goAndWaitForLoadOfPeople() throws InterruptedException, IOException, SAXException {
         HtmlPage htmlPage = wc.goTo("asynchPeople");

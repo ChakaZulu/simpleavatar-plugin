@@ -69,7 +69,12 @@ public final class SimpleAvatarResolver extends UserAvatarResolver implements De
 
     @Override
     public String findAvatarFor(User user, int width, int height) {
-        return ((DescriptorImpl)getDescriptor()).getAvatarUrlTemplate()
+        String avatarUrlTemplate = ((DescriptorImpl)getDescriptor()).getAvatarUrlTemplate();
+        if (avatarUrlTemplate == null || avatarUrlTemplate.isEmpty())
+        {
+            return null;
+        }
+        return avatarUrlTemplate
                 .replace(KEY_USER, user.getFullName())
                 .replace(KEY_ID, user.getId())
                 .replace(KEY_WIDTH, String.valueOf(width))

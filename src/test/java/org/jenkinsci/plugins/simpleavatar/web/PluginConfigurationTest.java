@@ -32,6 +32,7 @@ import hudson.PluginWrapper;
 import hudson.tasks.UserAvatarResolver;
 import java.io.IOException;
 import java.util.List;
+import static org.jenkinsci.plugins.simpleavatar.PluginTestConfigs.AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT;
 import org.jenkinsci.plugins.simpleavatar.SimpleAvatarResolver;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -51,8 +52,6 @@ public class PluginConfigurationTest {
     
     @Rule
     public final JenkinsRule j = new JenkinsRule();
-    
-    private static final String MODIFIED_AVATAR_URL_TEMPLATE = "http://intranet.local/<u>/<i>/image.png";
     
     public PluginConfigurationTest() {
     }
@@ -134,12 +133,12 @@ public class PluginConfigurationTest {
     public void CustomPluginConfigurationIsSavedInRoundtrip() throws Exception
     {
         final SimpleAvatarResolver.DescriptorImpl descriptorBefore = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        descriptorBefore.setAvatarUrlTemplate(MODIFIED_AVATAR_URL_TEMPLATE);
+        descriptorBefore.setAvatarUrlTemplate(AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT);
         
         j.configRoundtrip();
         
         final SimpleAvatarResolver.DescriptorImpl descriptorAfter = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        Assert.assertEquals("configuration has not been saved", MODIFIED_AVATAR_URL_TEMPLATE, descriptorAfter.getAvatarUrlTemplate());
+        Assert.assertEquals("configuration has not been saved", AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT, descriptorAfter.getAvatarUrlTemplate());
     }
     
     @Test
@@ -155,10 +154,10 @@ public class PluginConfigurationTest {
         //final List<Object> byXPath = page.getByXPath("//input[@checkurl=\"/jenkins/descriptorByName/org.jenkinsci.plugins.simpleavatar.SimpleAvatarResolver/checkAvatarUrlTemplate\"]");
                 
         final HtmlInput input = (HtmlInput)byXPath.get(0);
-        final HtmlPage newPage = (HtmlPage)input.setValueAttribute(MODIFIED_AVATAR_URL_TEMPLATE);
+        final HtmlPage newPage = (HtmlPage)input.setValueAttribute(AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT);
         j.submit(newPage.getFormByName("config"));
         
         final SimpleAvatarResolver.DescriptorImpl descriptorAfter = j.get(SimpleAvatarResolver.DescriptorImpl.class);
-        Assert.assertEquals("configuration has not been saved", MODIFIED_AVATAR_URL_TEMPLATE, descriptorAfter.getAvatarUrlTemplate());
+        Assert.assertEquals("configuration has not been saved", AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT, descriptorAfter.getAvatarUrlTemplate());
     }
 }
