@@ -7,18 +7,19 @@
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <!-- Baseline Jenkins version you use to build and test the plugin. Users must have this version or newer to run. -->
-    <version>1.580.1</version>
-    <relativePath/>
+    <version>1.509.3</version>
   </parent>
+  
   <groupId>org.jenkins-ci.plugins</groupId>
-  <artifactId>simple-avatar</artifactId>
+  <!-- index.jelly is only found if the resource path contains the "short-name" which is derived from artifactId -->
+  <artifactId>simpleavatar</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <name>Jenkins Simple Avatar Plugin</name>
-  <description>This plugin shows images from another host as Jenkins user images.</description>
+<!--  <description>This plugin shows images from another host as Jenkins user images.</description> -->
   <!-- <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url> -->
-  <url>https://github.com/ChakaZulu/simpleavatar-plugin.git</url>
+<!--  <url>https://github.com/ChakaZulu/simpleavatar-plugin.git</url> -->
   <licenses>
     <license>
       <name>MIT License</name>
@@ -58,6 +59,37 @@
       <url>http://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
+  
+  <!-- from gravatar, what is this exactly?
+  <build>
+     <pluginManagement>
+       <plugins>
+         <plugin>
+           <artifactId>maven-compiler-plugin</artifactId>
+           <version>2.3.2</version>
+         </plugin>
+         <plugin>
+           <artifactId>maven-deploy-plugin</artifactId>
+           <version>2.5</version>
+         </plugin>
+         <plugin>
+           <artifactId>maven-install-plugin</artifactId>
+           <version>2.3.1</version>
+         </plugin>
+       </plugins>
+     </pluginManagement>
+     <plugins>
+       <plugin>
+         <artifactId>maven-release-plugin</artifactId>
+         <version>2.5</version>
+         <configuration>
+           <goals>deploy</goals>
+         </configuration>
+       </plugin>
+     </plugins>
+   </build>
+   -->
+   
   <!-- If you want to depend on other plugins:
   <dependencies>
     <dependency>
@@ -67,5 +99,14 @@
     </dependency>
   </dependencies>
   -->
-
+    <dependencies>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
 </project>
