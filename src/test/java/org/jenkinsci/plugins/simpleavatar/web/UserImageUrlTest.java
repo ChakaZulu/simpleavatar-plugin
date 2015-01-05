@@ -168,9 +168,6 @@ public class UserImageUrlTest {
     // utils
     private String UserImageUrl(User user) throws IOException, SAXException
     {
-        // jenkins 1.509.3
-        //@TODO
-        // jenkins xxx
         HtmlElement element = wc.goTo("user/" + user.getId()).getElementById("main-panel").getElementsByTagName("img").get(0);
         return element.getAttribute("src");
     }
@@ -179,14 +176,7 @@ public class UserImageUrlTest {
     {
         HtmlPage htmlPage = goAndWaitForLoadOfPeople();
         
-        // jenkins 1.509.3
-        HtmlElement elementById = htmlPage.getElementById(user.getId());
-        DomAttr attr =  (DomAttr)elementById.getByXPath("descendant::img/@src").get(0);
-                
-        //@TODO
-        // jenkins xxx
-        //HtmlElement elementById = htmlPage.getElementById("person-" + user.getId());
-        //DomAttr attr =  (DomAttr)elementById.getByXPath("//img/@src").get(0);
+        DomAttr attr = (DomAttr)htmlPage.getByXPath("//tr[contains(@id,'"+user.getId()+"')]/descendant::img/@src").get(0);
         return attr.getValue();
     }
 

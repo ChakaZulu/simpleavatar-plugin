@@ -145,14 +145,8 @@ public class PluginConfigurationTest {
     public void CustomPluginConfigurationIsSaved() throws Exception
     {
         final JenkinsRule.WebClient webClient = j.createWebClient();
-        final HtmlPage page = webClient.goTo("configure");
-        
-        // jenkins 1.509.3
-        final List<Object> byXPath = page.getByXPath("//input[@name=\"_.avatarUrlTemplate\" and ancestor::tr/preceding-sibling::tr/descendant::div[contains(text(),'Simple Avatar')]]");
-        // @TODO
-        // jenkins xxx
-        //final List<Object> byXPath = page.getByXPath("//input[@checkurl=\"/jenkins/descriptorByName/org.jenkinsci.plugins.simpleavatar.SimpleAvatarResolver/checkAvatarUrlTemplate\"]");
-                
+        final HtmlPage page = webClient.goTo("configure");     
+        final List<Object> byXPath = page.getByXPath("//input[@name=\"_.avatarUrlTemplate\" and ancestor::tr/preceding-sibling::tr/descendant::div[contains(text(),'Simple Avatar')]]");         
         final HtmlInput input = (HtmlInput)byXPath.get(0);
         final HtmlPage newPage = (HtmlPage)input.setValueAttribute(AVATAR_URL_TEMPLATE_NAME_ID_WIDTH_HEIGHT);
         j.submit(newPage.getFormByName("config"));
