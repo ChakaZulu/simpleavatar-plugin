@@ -51,7 +51,7 @@
    -->
    
    <!-- generate and deploy your site to GitHub's pages support -->
-   <distributionManagement>
+  <distributionManagement>
     <site>
       <id>github-project-site</id>
       <url>gitsite:git@github.com/ChakaZulu/simpleavatar-plugin.git</url>
@@ -70,17 +70,17 @@
         <artifactId>maven-scm-manager-plexus</artifactId>
         <version>1.9.2</version>
       </extension>
-      <!--
+      
       <extension>
         <groupId>org.kathrynhuxtable.maven.wagon</groupId>
         <artifactId>wagon-gitsite</artifactId>
         <version>0.3.1</version>
       </extension>
-      -->
+      
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh</artifactId>
-        <version>2.8</version><!-- 1.0-beta-7 -->
+        <version>2.8</version>
       </extension>
     </extensions>
     <!-- ... rest of your build section ... -->
@@ -169,10 +169,12 @@
           </reportSet>
         </reportSets>
       </plugin>
+      <!--
       <plugin>
         <artifactId>maven-surefire-report-plugin</artifactId>
         <version>2.18.1</version>
       </plugin>
+      -->
     </plugins>
   </reporting>
   <!-- end of generate and deploy your site to GitHub's pages support -->
